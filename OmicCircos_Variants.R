@@ -1,3 +1,5 @@
+'''Script to generate an OmicCircos plot from gff and vcf data'''
+
 setwd("/Users/jacobreeves/Desktop/Tsai/poster/OmicCircos")
 
 library(OmicCircos);

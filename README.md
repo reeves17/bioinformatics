@@ -1,6 +1,9 @@
 # Bioinformatics
 Posting of code I write to solve little bioinformatics-related problems here and there
 
+
+
+
 ## OmicCircos_Variants.R
 ### Go to my repository VCF-OmicCircos-Mapping for a full working version including example data
 * Creates an OmicCircos plot mapping vcf and gff data

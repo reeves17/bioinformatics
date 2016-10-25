@@ -1,6 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+'''
+Converts one or more vcf files into an appropriate format to be used by OmicCircos
+'''
+
 from sys import argv
 import os
 import re

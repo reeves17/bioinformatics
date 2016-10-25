@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-concatenates all coverage files to see how many times each area has been covered by all reads
+combines all .coverage files to see how many times each area has been covered by all reads
 '''
 
 from sys import argv

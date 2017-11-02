@@ -16,3 +16,9 @@ Posting of code I write to solve little bioinformatics-related problems here and
 ## vcf2OmicCircos.py
 ### another one you should look at in my VCF-OmicCircos-Mapping repository
 * converts a vcf file to OmicCircos usable data
+
+## fastq_percent_extraction_paired.py
+### extracts a specified percentage of reads from paired-end fastq files
+* Takes in arguments <data directory> <out directory> <percent>
+* Note that this does not extract an exact percent of reads. Instead, it assigns each read a perecnt chance of being added to the output file. The if statement looks like:
+ ''' if random.random() < (int(percent)/100.0): '''

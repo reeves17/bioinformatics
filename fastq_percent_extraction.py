@@ -11,8 +11,8 @@ This script extracts APPROXIMATELY a defined integer percent of
 reads from either single-end or paired-end reads from one or two
 fastq or fq files depending on whether single or paired. The input
 files(s) can be gzipped or not. They will be written out to the
-specified directory with the suffix _xxpercent.fastq.gz or
-_xxpercent.fq.gz depending on the input filename.
+specified directory with the prefix xpercent_filename where x is
+the percent specified and filename is the input file.
 
 SINGLE END ARGS
 argv[1] integer percent of reads to be extracted
@@ -112,20 +112,14 @@ def analyze_paired():
     sample2 = sample2[len(sample2) - 1]
     out_file1name = ""
     out_file2name = ""
-    if files[0].endswith(".fq"):
-        out_file1name = (files[0])[:-3] + '_' + str(percent) + 'percent.fq'
-        out_file2name = (files[1])[:-3] + '_' + str(percent) + 'percent.fq'
-    elif files[0].endswith(".fq.gz"):
-        out_file1name = (files[0])[:-6] + '_' + str(percent) + 'percent.fq'
-        out_file2name = (files[1])[:-6] + '_' + str(percent) + 'percent.fq'
-    elif files[0].endswith(".fastq"):
-        out_file1name = (files[0])[:-6] + '_' + str(percent) + 'percent.fastq'
-        out_file2name = (files[1])[:-6] + '_' + str(percent) + 'percent.fastq'
-    elif files[0].endswith(".fastq.gz"):
-        out_file1name = (files[0])[:-9] + '_' + str(percent) + 'percent.fastq'
-        out_file2name = (files[1])[:-9] + '_' + str(percent) + 'percent.fastq'
+    # if files are a valid fq or fastq file gzipped or not
+    if ((files[0].endswith(".fq") or files[0].endswith(".fq.gz") or files[0].endswith(".fastq") or
+        files[0].endswith(".fastq.gz")) and (files[1].endswith(".fq") or files[1].endswith(".fq.gz") or
+        files[1].endswith(".fastq") or files[1].endswith(".fastq.gz"))):
+        out_file1name = (files[0])[:(-1 * (len(sample1)))] + str(percent) + 'percent_' + sample1
+        out_file2name = (files[1])[:(-1 * (len(sample2)))] + str(percent) + 'percent_' + sample2
     else:
-        print("The file " + files[0] + " is not a valid fq or fastq file.")
+        print("The files " + files[0] + " and " + files[1] + " are not valid fq or fastq files.")
         exit(0)
     out_file1 = open(out_file1name, 'w')
     out_file2 = open(out_file2name, 'w')
@@ -228,14 +222,9 @@ def analyze_single():
     out_filename = ""
     sample = file.split("/")
     sample = sample[len(sample) - 1]
-    if file.endswith(".fq"):
-        out_filename = file[:-3] + '_' + str(percent) + 'percent.fq'
-    elif file.endswith(".fq.gz"):
-        out_filename = file[:-6] + '_' + str(percent) + 'percent.fq'
-    elif file.endswith(".fastq"):
-        out_filename = file[:-6] + '_' + str(percent) + 'percent.fastq'
-    elif file.endswith(".fastq.gz"):
-        out_filename = file[:-9] + '_' + str(percent) + 'percent.fastq'
+    # if file is a valid fastq file gzipped or not
+    if file.endswith(".fq") or file.endswith(".fq.gz") or file.endswith(".fastq") or file.endswith(".fastq.gz"):
+        out_filename = file[:(-1 * (len(sample)))] + str(percent) + 'percent_' + sample
     else:
         print("The file " + file + " is not a valid fq or fastq file.")
         exit(0)

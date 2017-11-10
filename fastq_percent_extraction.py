@@ -113,11 +113,14 @@ def analyze_paired():
     out_file1name = ""
     out_file2name = ""
     # if files are a valid fq or fastq file gzipped or not
-    if ((files[0].endswith(".fq") or files[0].endswith(".fq.gz") or files[0].endswith(".fastq") or
-        files[0].endswith(".fastq.gz")) and (files[1].endswith(".fq") or files[1].endswith(".fq.gz") or
-        files[1].endswith(".fastq") or files[1].endswith(".fastq.gz"))):
-        out_file1name = (files[0])[:(-1 * (len(sample1)))] + str(percent) + 'percent_' + sample1
-        out_file2name = (files[1])[:(-1 * (len(sample2)))] + str(percent) + 'percent_' + sample2
+    if ((files[0].endswith(".fq") or files[0].endswith(".fastq")) and
+            (files[1].endswith(".fq") or files[1].endswith(".fastq"))):
+        out_file1name = out_dir + '/' + 'P' + str(percent) + '_' + sample1
+        out_file2name = out_dir + '/' + 'P' + str(percent) + '_' + sample2
+    elif (files[0].endswith(".fq.gz") or files[0].endswith(".fastq.gz") and
+            files[1].endswith(".fq.gz") or files[1].endswith(".fastq.gz")):
+        out_file1name = out_dir + '/' + 'P' + str(percent) + '_' + sample1[:-3]
+        out_file2name = out_dir + '/' + 'P' + str(percent) + '_' + sample2[:-3]
     else:
         print("The files " + files[0] + " and " + files[1] + " are not valid fq or fastq files.")
         exit(0)
@@ -129,11 +132,11 @@ def analyze_paired():
     reads_out = set()  # sets make the recall MUCH faster
     # get line count
     if files[0].endswith(".gz"):  # is gzipped
-        with gzip.open(files[0], 'r') as infile:
+        with gzip.open(files[0], 'rt') as infile:
             for aline in infile:
                 lines += 1
     else:  # is not gzipped
-        with open(files[0], 'rb') as infile:
+        with open(files[0], 'r') as infile:
             for aline in infile:
                 lines += 1
     # determine pseudo-randomly based on percent which reads get included
@@ -142,7 +145,7 @@ def analyze_paired():
             reads_out.add(aread)
     # write out from files[0] based on reads_out
     if files[0].endswith(".gz"):  # is gzipped
-        with gzip.open(files[0], 'r') as infile1:
+        with gzip.open(files[0], 'rt') as infile1:
             line_number = 0
             for aline in infile1:
                 aline = str(aline)
@@ -152,15 +155,12 @@ def analyze_paired():
                     else:
                         insert_line = False
                 if insert_line:
-                    if aline.endswith("\\n\'"):
-                        out_file1.write(aline[2:-3] + '\n')
-                    else:
-                        out_file1.write(aline[2:] + '\n')
+                    out_file1.write(aline)
                 line_number += 1
         out_file1.close()
         gzip_file(out_file1name)
         # write out from files[1] based on reads_out
-        with gzip.open(files[1], 'r') as infile2:
+        with gzip.open(files[1], 'rt') as infile2:
             line_number = 0
             for aline in infile2:
                 aline = str(aline)
@@ -170,15 +170,12 @@ def analyze_paired():
                     else:
                         insert_line = False
                 if insert_line:
-                    if aline.endswith("\\n\'"):
-                        out_file2.write(aline[2:-3] + '\n')
-                    else:
-                        out_file2.write(aline[2:] + '\n')
+                    out_file2.write(aline)
                 line_number += 1
         out_file2.close()
         gzip_file(out_file2name)
     else:  # not gzipped
-        with open(files[0], 'rb') as infile1:
+        with open(files[0], 'r') as infile1:
             line_number = 0
             for aline in infile1:
                 aline = str(aline)
@@ -188,15 +185,12 @@ def analyze_paired():
                     else:
                         insert_line = False
                 if insert_line:
-                    if aline.endswith("\\n\'"):
-                        out_file1.write(aline[2:-3] + '\n')
-                    else:
-                        out_file1.write(aline[2:] + '\n')
+                    out_file1.write(aline)
                 line_number += 1
         out_file1.close()
         gzip_file(out_file1name)
         # write out from files[1] based on reads_out
-        with open(files[1], 'rb') as infile2:
+        with open(files[1], 'r') as infile2:
             line_number = 0
             for aline in infile2:
                 aline = str(aline)
@@ -206,10 +200,7 @@ def analyze_paired():
                     else:
                         insert_line = False
                 if insert_line:
-                    if aline.endswith("\\n\'"):
-                        out_file2.write(aline[2:-3] + '\n')
-                    else:
-                        out_file2.write(aline[2:] + '\n')
+                    out_file2.write(aline)
                 line_number += 1
         out_file2.close()
         gzip_file(out_file2name)
@@ -223,8 +214,10 @@ def analyze_single():
     sample = file.split("/")
     sample = sample[len(sample) - 1]
     # if file is a valid fastq file gzipped or not
-    if file.endswith(".fq") or file.endswith(".fq.gz") or file.endswith(".fastq") or file.endswith(".fastq.gz"):
-        out_filename = file[:(-1 * (len(sample)))] + str(percent) + 'percent_' + sample
+    if file.endswith(".fq") or file.endswith(".fastq"):
+        out_filename = out_dir + '/' + 'P' + str(percent) + '_' + sample
+    elif file.endswith(".fq.gz") or file.endswith(".fastq.gz"):
+        out_filename = out_dir + '/' + 'P' + str(percent) + '_' + sample[:-3]
     else:
         print("The file " + file + " is not a valid fq or fastq file.")
         exit(0)
@@ -235,11 +228,11 @@ def analyze_single():
     reads_out = set()  # sets make the recall MUCH faster
     # get line count
     if file.endswith(".gz"):  # is gzipped
-        with gzip.open(file, 'r') as infile:
+        with gzip.open(file, 'rt') as infile:
             for aline in infile:
                 lines += 1
     else:  # is not gzipped
-        with open(file, 'rb') as infile:
+        with open(file, 'r') as infile:
             for aline in infile:
                 lines += 1
     # determine pseudo-randomly based on percent which reads get included
@@ -248,7 +241,7 @@ def analyze_single():
             reads_out.add(aread)
     # write out from files[0] based on reads_out
     if file.endswith(".gz"):  # is gzipped
-        with gzip.open(file, 'r') as infile:
+        with gzip.open(file, 'rt') as infile:
             line_number = 0
             for aline in infile:
                 aline = str(aline)
@@ -258,15 +251,12 @@ def analyze_single():
                     else:
                         insert_line = False
                 if insert_line:
-                    if aline.endswith("\\n\'"):
-                        out_file.write(aline[2:-3] + '\n')
-                    else:
-                        out_file.write(aline[2:] + '\n')
+                    out_file.write(aline)
                 line_number += 1
         out_file.close()
         gzip_file(out_filename)
     else:  # not gzipped
-        with open(file, 'rb') as infile:
+        with open(file, 'r') as infile:
             line_number = 0
             for aline in infile:
                 aline = str(aline)
@@ -276,10 +266,7 @@ def analyze_single():
                     else:
                         insert_line = False
                 if insert_line:
-                    if aline.endswith("\\n\'"):
-                        out_file.write(aline[2:-3] + '\n')
-                    else:
-                        out_file.write(aline[2:] + '\n')
+                    out_file.write(aline)
                 line_number += 1
         out_file.close()
         gzip_file(out_filename)

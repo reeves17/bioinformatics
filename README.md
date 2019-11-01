@@ -1,4 +1,4 @@
-# Bioinformatics
+# Bioinformatics Scripts
 Repo for scripts to solve little bioinformatics-related problems here and there
 
 

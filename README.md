@@ -22,3 +22,6 @@ Repo for scripts to solve little bioinformatics-related problems here and there
 * Takes in arguments <data directory> <out directory> <percent>
 * Note that this does not extract an exact percent of reads. Instead, it assigns each read a perecnt chance of being added to the output file. The if statement looks like:
 ``` if random.random() < (int(percent)/100.0): ```
+
+## coef.py
+### calculates correlation coefficients between genes based on a database of gene vs. tissue presence

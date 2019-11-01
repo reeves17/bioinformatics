@@ -1,5 +1,5 @@
 # Bioinformatics
-Posting of code I write to solve little bioinformatics-related problems here and there
+Repo for scripts to solve little bioinformatics-related problems here and there
 
 
 

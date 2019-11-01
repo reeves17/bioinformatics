@@ -25,5 +25,5 @@ Repo for scripts to solve little bioinformatics-related problems here and there
 
 ## coef
 ### calculates correlation coefficients between genes based on a database of gene vs. tissue presence
-* WGD input file is generated using (WGD)[https://github.com/arzwa/wgd] following the recommended pipeline.
+* WGD input file is generated using [WGD](https://github.com/arzwa/wgd) following the recommended pipeline.
 * tissue data is from in-house data

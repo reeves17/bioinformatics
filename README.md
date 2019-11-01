@@ -23,5 +23,7 @@ Repo for scripts to solve little bioinformatics-related problems here and there
 * Note that this does not extract an exact percent of reads. Instead, it assigns each read a perecnt chance of being added to the output file. The if statement looks like:
 ``` if random.random() < (int(percent)/100.0): ```
 
-## coef.py
+## coef
 ### calculates correlation coefficients between genes based on a database of gene vs. tissue presence
+* WGD input file is generated using (WGD)[https://github.com/arzwa/wgd] following the recommended pipeline.
+* tissue data is from in-house data
